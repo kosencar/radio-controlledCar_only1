@@ -14,7 +14,6 @@ namespace custom {
     // センサのしきい値（初期値）
     let sensorThreshold = 700
 
-
     // タイヤの左右を選択するための設定
     export enum TireDirection {
         //% block="右"
@@ -37,6 +36,14 @@ namespace custom {
         Right,
         //% block="左"
         Left
+    }
+
+    // センサの白黒を選択するための設定
+    export enum SensorColor {
+        //% block="白"
+        White,
+        //% block="黒"
+        Black
     }
 
     // タイヤの回転方向の前後を選択するための設定
@@ -131,9 +138,9 @@ namespace custom {
      * 指定した方向のセンサーが白かどうか判定します
      * @param direction センサーの方向
      */
-    //% block="%direction のセンサが白"
+    //% block="%direction のセンサが %color"
     //% group="センサー"
-    export function isWhite(direction: SensorDirection): boolean {
+    export function isWhite(direction: SensorDirection, color: SensorColor): boolean {
         let sensorValue = 0
 
         if (direction == SensorDirection.Left) {
@@ -141,7 +148,12 @@ namespace custom {
         } else {
             sensorValue = pins.analogReadPin(AnalogPin.P0)
         }
-
-        return sensorValue < sensorThreshold
+        if (color == SensorColor.White) {
+            return sensorValue < sensorThreshold
+        } else {
+            return sensorValue > sensorThreshold
+        }
+        
     }
+
 }
